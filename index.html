@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🍁 Recolectando weed para el fumanchu 🍁</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            touch-action: pan-x pan-y;
+        }
+        
+        .contenedor-juego {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: white;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 4px;
+        }
+        
+        .titulo {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .titulo h2 {
+            font-size: 1.1rem;
+        }
+        
+        .info {
+            background: rgba(255,255,255,0.3);
+            padding: 6px 12px;
+            border-radius: 40px;
+            display: flex;
+            gap: 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            flex-wrap: wrap;
+        }
+        
+        .info span {
+            background: #ff4d6d;
+            padding: 3px 8px;
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #2d1b0e;
+            border-radius: 18px;
+            border: 3px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            touch-action: none;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            touch-action: none;
+        }
+        
+        .barra-marihuana {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .marihuana-colectada {
+            display: flex;
+            gap: 8px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 4px 16px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 40px;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .marihuana-colectada:active {
+            transform: scale(0.95);
+            background: #2e8b57;
+            border-color: white;
+        }
+        
+        .marihuana-necesarias {
+            background: #2e8b57;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .menu-acciones {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 8px 0 4px;
+        }
+        
+        .btn-accion {
+            background: rgba(255,255,255,0.95);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2e8b57;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            max-width: 180px;
+            border: 2px solid #2e8b57;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .btn-accion:active {
+            transform: scale(0.95);
+            background: #2e8b57;
+            color: white;
+        }
+        
+        .btn-accion.hidden {
+            display: none;
+        }
+        
+        .btn-accion:not(.hidden) {
+            animation: aparecer 0.3s ease;
+        }
+        
+        .controles-tactiles {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 240px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-direccion {
+            aspect-ratio: 1/1;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 18px;
+            font-size: 2.2rem;
+            cursor: pointer;
+            color: #2e8b57;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        
+        .btn-direccion:active {
+            transform: scale(0.9);
+            background: #2e8b57;
+            color: white;
+        }
+        
+        .vacio {
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .acciones {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .boton {
+            background: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2e8b57;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            flex: 1;
+            min-width: 120px;
+            -webkit-tap-highlight-color: transparent;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .boton:active {
+            transform: scale(0.95);
+            background: #2e8b57;
+            color: white;
+        }
+        
+        .boton.jugar {
+            background: #2e8b57;
+            color: white;
+            animation: late 1.5s infinite;
+        }
+        
+        @keyframes late {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes aparecer {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .indicador-obstaculos {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 8px 0;
+            color: white;
+            font-size: 1.1rem;
+            flex-wrap: wrap;
+        }
+        
+        .indicador-obstaculos span {
+            background: rgba(0,0,0,0.2);
+            padding: 4px 12px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        /* Mensaje de victoria */
+        .mensaje-victoria {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            animation: fadeIn 0.4s ease;
+            padding: 15px;
+        }
+        
+        .contenido-victoria {
+            background: linear-gradient(135deg, #2e8b57, #3cb371);
+            padding: 30px 20px;
+            border-radius: 40px;
+            text-align: center;
+            border: 4px solid white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            max-width: 380px;
+            width: 100%;
+            margin: 15px;
+        }
+        
+        .contenido-victoria h2 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .contenido-victoria p {
+            font-size: 1.7rem;
+            color: white;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+        
+        .botones-victoria {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-victoria {
+            background: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2e8b57;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid white;
+            min-width: 140px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-victoria:active {
+            transform: scale(0.95);
+            background: #2e8b57;
+            color: white;
+        }
+        
+        /* Mensaje de advertencia para la pastilla */
+        .mensaje-advertencia {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 68, 68, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 60px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 4000;
+            animation: aparecerAdvertencia 0.3s ease, desaparecer 1.5s forwards;
+            border: 4px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        
+        @keyframes aparecerAdvertencia {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        @keyframes desaparecer {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Ajustes para pantallas muy pequeñas */
+        @media (max-width: 360px) {
+            .titulo {
+                font-size: 1.1rem;
+            }
+            .titulo h2 {
+                font-size: 0.9rem;
+            }
+            .info {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
+            .btn-direccion {
+                font-size: 1.8rem;
+            }
+            .marihuana-colectada {
+                font-size: 1.5rem;
+            }
+            .contenido-victoria h2 {
+                font-size: 1.6rem;
+            }
+            .contenido-victoria p {
+                font-size: 1.3rem;
+            }
+            .mensaje-advertencia {
+                font-size: 1.5rem;
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-juego">
+        <div class="cabecera">
+            <div class="titulo">
+                <span>🍁</span>
+                <h2> Recolectando weed para el fumanchu </h2>
+                <span>🍁</span>
+            </div>
+            <div class="info">
+                <div>⏱️ <span id="tiempo">0</span>s</div>
+                <div>🏆 <span id="record">--</span></div>
+            </div>
+        </div>
+        
+        <div class="canvas-wrapper" id="canvasWrapper">
+            <canvas id="laberintoCanvas"></canvas>
+        </div>
+        
+        <div class="barra-marihuana">
+            <div class="marihuana-colectada" id="marihuanaDisplay">
+                🍂🍂🍂
+            </div>
+            <div class="marihuana-necesarias" id="marihuanaNecesarias">
+                Necesitas: 0/3 🍁
+            </div>
+        </div>
+        
+        <div class="menu-acciones">
+            <button class="btn-accion hidden" id="btnFumar">🚬 Fumar</button>
+            <button class="btn-accion hidden" id="btnAguantar">💪 Aguantar el dengue</button>
+        </div>
+        
+        <div class="indicador-obstaculos">
+            <span>💊 -5s</span>
+            <span>🌵 -🍁</span>
+            <span>🔥 ←</span>
+        </div>
+        
+        <div class="controles-tactiles">
+            <div class="vacio"></div>
+            <button class="btn-direccion" id="arriba">⬆️</button>
+            <div class="vacio"></div>
+            <button class="btn-direccion" id="izquierda">⬅️</button>
+            <button class="btn-direccion" id="abajo">⬇️</button>
+            <button class="btn-direccion" id="derecha">➡️</button>
+        </div>
+        
+        <div class="acciones">
+            <button class="boton jugar" id="reiniciar">🍁 Reiniciar</button>
+            <a href="#" class="boton" id="salir">🏠 Salir</a>
+        </div>
+    </div>
+
+    <div id="victoriaOverlay" class="mensaje-victoria" style="display: none;">
+        <div class="contenido-victoria">
+            <h2>🎉 ¡Felicidades! 🍁</h2>
+            <p>Y fumaron felices para siempre 💚</p>
+            <div class="botones-victoria">
+                <button class="btn-victoria" onclick="volverAlJuego()">🍁 Jugar de nuevo</button>
+                <a href="juego.html" class="btn-victoria" onclick="cerrarJuego()" style="text-decoration: none; display: inline-block;">🏠 Ver que hay aqui 👀</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="mensajeAdvertencia" class="mensaje-advertencia" style="display: none;">
+        🚫 Esta droga no
+    </div>
+
+    <script>
+        // Configuración inicial
+        const canvas = document.getElementById('laberintoCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Cargar mejor tiempo de localStorage
+        let mejorTiempo = localStorage.getItem('mejorTiempoLaberinto');
+        if (!mejorTiempo) {
+            mejorTiempo = 999;
+            localStorage.setItem('mejorTiempoLaberinto', mejorTiempo);
+        }
+        document.getElementById('record').textContent = mejorTiempo == 999 ? '--' : mejorTiempo;
+        
+        // Ajustar tamaño del canvas para que se vea bien en móvil
+        const size = Math.min(window.innerWidth - 40, 500);
+        canvas.width = size;
+        canvas.height = size;
+        
+        const CELDA = canvas.width / 17;
+        const FILAS = 17;
+        const COLUMNAS = 17;
+        
+        // Posiciones: chica arriba izquierda, chico abajo derecha
+        let jugador = { x: 1, y: 1 }; // Chica (arriba izquierda)
+        let meta = { x: 15, y: 15 }; // Chico (abajo derecha)
+        
+        let tiempoInicio = Date.now();
+        let tiempoActual = 0;
+        let juegoActivo = true;
+        let victoria = false;
+        
+        let marihuanaRecolectada = 0;
+        const MARIHUANA_NECESARIAS = 3;
+        
+        let obstaculos = [
+            { x: 4, y: 4, tipo: 'corazon', activo: true },
+            { x: 10, y: 6, tipo: 'cactus', activo: true },
+            { x: 13, y: 9, tipo: 'agua', activo: true },
+            { x: 7, y: 11, tipo: 'corazon', activo: true },
+            { x: 11, y: 5, tipo: 'cactus', activo: true },
+            { x: 5, y: 13, tipo: 'agua', activo: true },
+            { x: 9, y: 8, tipo: 'corazon', activo: true }
+        ];
+        
+        let marihuana = [
+            { x: 3, y: 3, recolectada: false },
+            { x: 8, y: 5, recolectada: false },
+            { x: 12, y: 8, recolectada: false },
+            { x: 5, y: 10, recolectada: false },
+            { x: 14, y: 5, recolectada: false },
+            { x: 7, y: 12, recolectada: false },
+            { x: 10, y: 10, recolectada: false },
+            { x: 4, y: 7, recolectada: false },
+            { x: 13, y: 6, recolectada: false }
+        ];
+        
+        const laberinto = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+            [1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],
+            [1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,1],
+            [1,0,1,0,1,1,1,0,1,1,1,1,1,0,1,0,1],
+            [1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1],
+            [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1],
+            [1,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1],
+            [1,0,1,0,1,1,1,0,1,0,1,1,1,0,1,0,1],
+            [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1],
+            [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1],
+            [1,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1],
+            [1,0,1,0,1,1,1,0,1,0,1,1,1,0,1,0,1],
+            [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1],
+            [1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        // Función para mostrar mensaje de advertencia de la pastilla
+        function mostrarAdvertenciaPastilla() {
+            const mensaje = document.getElementById('mensajeAdvertencia');
+            mensaje.style.display = 'block';
+            
+            // Ocultar después de 1.5 segundos
+            setTimeout(() => {
+                mensaje.style.display = 'none';
+            }, 1500);
+        }
+
+        // Función para mostrar mensaje de victoria
+        function mostrarVictoria() {
+            document.getElementById('victoriaOverlay').style.display = 'flex';
+        }
+        
+        function volverAlJuego() {
+            document.getElementById('victoriaOverlay').style.display = 'none';
+            reiniciarJuego();
+        }
+        
+        function cerrarJuego() {
+            window.location.href = '#';
+            // Aquí puedes cambiar el enlace a donde quieras redirigir
+        }
+        
+        function actualizarBotonesAccion() {
+            const btnFumar = document.getElementById('btnFumar');
+            const btnAguantar = document.getElementById('btnAguantar');
+            
+            if(marihuanaRecolectada === 0) {
+                btnFumar.classList.add('hidden');
+                btnAguantar.classList.add('hidden');
+            }
+        }
+        
+        function mostrarOpcionesMarihuana() {
+            const btnFumar = document.getElementById('btnFumar');
+            const btnAguantar = document.getElementById('btnAguantar');
+            
+            if (btnFumar.classList.contains('hidden') && marihuanaRecolectada > 0) {
+                btnFumar.classList.remove('hidden');
+                btnAguantar.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    if(!btnFumar.classList.contains('hidden') && !btnAguantar.classList.contains('hidden')) {
+                        btnFumar.classList.add('hidden');
+                        btnAguantar.classList.add('hidden');
+                    }
+                }, 3000);
+            }
+        }
+        
+        function dibujarTodo() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for(let fila = 0; fila < FILAS; fila++) {
+                for(let col = 0; col < COLUMNAS; col++) {
+                    const x = col * CELDA;
+                    const y = fila * CELDA;
+                    
+                    if(laberinto[fila][col] === 1) {
+                        ctx.fillStyle = '#5d3a1a';
+                        ctx.fillRect(x, y, CELDA, CELDA);
+                        ctx.fillStyle = '#7d5a3a';
+                        ctx.fillRect(x + 4, y + 4, CELDA - 8, CELDA - 8);
+                    } else {
+                        ctx.fillStyle = '#8b6b4d';
+                        ctx.fillRect(x, y, CELDA, CELDA);
+                        ctx.fillStyle = '#c69c6d';
+                        ctx.fillRect(x + 2, y + 2, CELDA - 4, CELDA - 4);
+                    }
+                }
+            }
+            
+            obstaculos.forEach(obs => {
+                if(obs.activo && laberinto[obs.y] && laberinto[obs.y][obs.x] === 0) {
+                    const x = obs.x * CELDA;
+                    const y = obs.y * CELDA;
+                    
+                    if(obs.tipo === 'corazon') {
+                        ctx.font = `${CELDA * 0.9}px Arial`;
+                        ctx.fillStyle = '#ff4444';
+                        ctx.fillText('💊', x + 5, y + CELDA * 0.8);
+                        ctx.font = `${CELDA * 0.3}px Arial`;
+                        ctx.fillStyle = 'white';
+                        ctx.fillText('-5s', x + CELDA * 0.3, y + CELDA * 1.1);
+                    } else if(obs.tipo === 'cactus') {
+                        ctx.font = `${CELDA * 0.9}px Arial`;
+                        ctx.fillStyle = '#228b22';
+                        ctx.fillText('🌵', x + 5, y + CELDA * 0.8);
+                        ctx.font = `${CELDA * 0.3}px Arial`;
+                        ctx.fillStyle = 'white';
+                        ctx.fillText('-🍁', x + CELDA * 0.3, y + CELDA * 1.1);
+                    } else if(obs.tipo === 'agua') {
+                        ctx.font = `${CELDA * 0.9}px Arial`;
+                        ctx.fillStyle = '#ff4444';
+                        ctx.fillText('🔥', x + 5, y + CELDA * 0.8);
+                        ctx.font = `${CELDA * 0.3}px Arial`;
+                        ctx.fillStyle = 'white';
+                        ctx.fillText('←', x + CELDA * 0.4, y + CELDA * 1.1);
+                    }
+                }
+            });
+            
+            marihuana.forEach(m => {
+                if(!m.recolectada && laberinto[m.y] && laberinto[m.y][m.x] === 0) {
+                    const x = m.x * CELDA;
+                    const y = m.y * CELDA;
+                    ctx.shadowColor = '#2e8b57';
+                    ctx.shadowBlur = 20;
+                    ctx.font = `${CELDA * 0.9}px Arial`;
+                    ctx.fillStyle = '#2e8b57';
+                    ctx.fillText('🍁', x + 5, y + CELDA * 0.8);
+                    ctx.shadowBlur = 0;
+                }
+            });
+            
+            const metaX = meta.x * CELDA;
+            const metaY = meta.y * CELDA;
+            
+            ctx.shadowColor = '#4169e1';
+            ctx.shadowBlur = 30;
+            
+            ctx.fillStyle = '#4169e1';
+            ctx.fillRect(metaX + CELDA * 0.3, metaY + CELDA * 0.5, CELDA * 0.4, CELDA * 0.5);
+            
+            ctx.fillStyle = '#ffe0bd';
+            ctx.beginPath();
+            ctx.arc(metaX + CELDA * 0.5, metaY + CELDA * 0.4, CELDA * 0.22, 0, Math.PI*2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#333';
+            ctx.beginPath();
+            ctx.arc(metaX + CELDA * 0.4, metaY + CELDA * 0.35, CELDA * 0.05, 0, Math.PI*2);
+            ctx.arc(metaX + CELDA * 0.6, metaY + CELDA * 0.35, CELDA * 0.05, 0, Math.PI*2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#4a2c1a';
+            ctx.beginPath();
+            ctx.arc(metaX + CELDA * 0.5, metaY + CELDA * 0.25, CELDA * 0.2, 0, Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillRect(metaX + CELDA * 0.3, metaY + CELDA * 1.0, CELDA * 0.12, CELDA * 0.25);
+            ctx.fillRect(metaX + CELDA * 0.58, metaY + CELDA * 1.0, CELDA * 0.12, CELDA * 0.25);
+            
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(metaX + CELDA * 0.25, metaY + CELDA * 1.2, CELDA * 0.2, CELDA * 0.08);
+            ctx.fillRect(metaX + CELDA * 0.55, metaY + CELDA * 1.2, CELDA * 0.2, CELDA * 0.08);
+            
+            ctx.shadowBlur = 0;
+            
+            const jugX = jugador.x * CELDA;
+            const jugY = jugador.y * CELDA;
+            
+            ctx.shadowColor = '#ff69b4';
+            ctx.shadowBlur = 30;
+            
+            ctx.fillStyle = '#ff69b4';
+            ctx.beginPath();
+            ctx.moveTo(jugX + CELDA * 0.5, jugY + CELDA * 0.4);
+            ctx.lineTo(jugX + CELDA * 0.9, jugY + CELDA * 0.9);
+            ctx.lineTo(jugX + CELDA * 0.1, jugY + CELDA * 0.9);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.fillStyle = '#ffe0bd';
+            ctx.beginPath();
+            ctx.arc(jugX + CELDA * 0.5, jugY + CELDA * 0.3, CELDA * 0.2, 0, Math.PI*2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#333';
+            ctx.beginPath();
+            ctx.arc(jugX + CELDA * 0.4, jugY + CELDA * 0.25, CELDA * 0.05, 0, Math.PI*2);
+            ctx.arc(jugX + CELDA * 0.6, jugY + CELDA * 0.25, CELDA * 0.05, 0, Math.PI*2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#8b4513';
+            ctx.beginPath();
+            ctx.arc(jugX + CELDA * 0.5, jugY + CELDA * 0.2, CELDA * 0.22, 0, Math.PI);
+            ctx.fill();
+            
+            ctx.shadowBlur = 0;
+            
+            if(marihuanaRecolectada > 0) {
+                ctx.font = `${CELDA * 0.5}px Arial`;
+                ctx.fillStyle = '#2e8b57';
+                ctx.fillText('🍁', jugX + CELDA * 0.8, jugY);
+            }
+            
+            actualizarDisplayMarihuana();
+        }
+        
+        function actualizarDisplayMarihuana() {
+            const display = document.getElementById('marihuanaDisplay');
+            let texto = '';
+            for(let i = 0; i < MARIHUANA_NECESARIAS; i++) {
+                if(i < marihuanaRecolectada) {
+                    texto += '🍁';
+                } else {
+                    texto += '🍂';
+                }
+            }
+            display.textContent = texto;
+            
+            document.getElementById('marihuanaNecesarias').innerHTML = 
+                `Necesitas: ${marihuanaRecolectada}/${MARIHUANA_NECESARIAS} 🍁`;
+            
+            actualizarBotonesAccion();
+        }
+        
+        function mover(dx, dy) {
+            if(!juegoActivo || victoria) return;
+            
+            const nuevaX = jugador.x + dx;
+            const nuevaY = jugador.y + dy;
+            
+            if(nuevaX < 0 || nuevaX >= COLUMNAS || nuevaY < 0 || nuevaY >= FILAS) return;
+            
+            if(laberinto[nuevaY] && laberinto[nuevaY][nuevaX] === 0) {
+                
+                let obstaculoActivo = false;
+                obstaculos.forEach(obs => {
+                    if(obs.activo && obs.x === nuevaX && obs.y === nuevaY) {
+                        obstaculoActivo = true;
+                        
+                        if(obs.tipo === 'corazon') {
+                            tiempoInicio -= 5000;
+                            obs.activo = false;
+                            // MOSTRAR MENSAJE DE ADVERTENCIA PARA LA PASTILLA
+                            mostrarAdvertenciaPastilla();
+                        } else if(obs.tipo === 'cactus') {
+                            if(marihuanaRecolectada > 0) {
+                                marihuanaRecolectada--;
+                            }
+                            obs.activo = false;
+                        } else if(obs.tipo === 'agua') {
+                            return;
+                        }
+                    }
+                });
+                
+                if(!obstaculoActivo) {
+                    jugador.x = nuevaX;
+                    jugador.y = nuevaY;
+                }
+                
+                marihuana.forEach(m => {
+                    if(!m.recolectada && m.x === nuevaX && m.y === nuevaY) {
+                        m.recolectada = true;
+                        marihuanaRecolectada++;
+                        
+                        mostrarOpcionesMarihuana();
+                    }
+                });
+                
+                if(jugador.x === meta.x && jugador.y === meta.y) {
+                    if(marihuanaRecolectada >= MARIHUANA_NECESARIAS) {
+                        victoria = true;
+                        juegoActivo = false;
+                        
+                        let tiempoFinal = Math.floor((Date.now() - tiempoInicio) / 1000);
+                        
+                        if(tiempoFinal < mejorTiempo) {
+                            mejorTiempo = tiempoFinal;
+                            document.getElementById('record').textContent = tiempoFinal;
+                            localStorage.setItem('mejorTiempoLaberinto', tiempoFinal);
+                        }
+                        
+                        mostrarVictoria();
+                    }
+                }
+            }
+        }
+        
+        function reiniciarJuego() {
+            jugador = { x: 2, y: 2 };
+            tiempoInicio = Date.now();
+            juegoActivo = true;
+            victoria = false;
+            marihuanaRecolectada = 0;
+            
+            obstaculos.forEach(obs => obs.activo = true);
+            marihuana.forEach(m => m.recolectada = false);
+            
+            document.getElementById('btnFumar').classList.add('hidden');
+            document.getElementById('btnAguantar').classList.add('hidden');
+        }
+        
+        function actualizarTiempo() {
+            if(juegoActivo && !victoria) {
+                tiempoActual = Math.floor((Date.now() - tiempoInicio) / 1000);
+                document.getElementById('tiempo').textContent = tiempoActual;
+            }
+            requestAnimationFrame(actualizarTiempo);
+        }
+        
+        // Eventos para los botones de acción
+        document.getElementById('btnFumar').addEventListener('click', () => {
+            if(marihuanaRecolectada > 0) {
+                marihuanaRecolectada--;
+                actualizarDisplayMarihuana();
+                document.getElementById('btnFumar').classList.add('hidden');
+                document.getElementById('btnAguantar').classList.add('hidden');
+            }
+        });
+        
+        document.getElementById('btnAguantar').addEventListener('click', () => {
+            if(marihuanaRecolectada > 0) {
+                actualizarDisplayMarihuana();
+                document.getElementById('btnFumar').classList.add('hidden');
+                document.getElementById('btnAguantar').classList.add('hidden');
+            }
+        });
+        
+        document.getElementById('marihuanaDisplay').addEventListener('click', () => {
+            if(marihuanaRecolectada > 0) {
+                const btnFumar = document.getElementById('btnFumar');
+                const btnAguantar = document.getElementById('btnAguantar');
+                
+                if (btnFumar.classList.contains('hidden')) {
+                    btnFumar.classList.remove('hidden');
+                    btnAguantar.classList.remove('hidden');
+                } else {
+                    btnFumar.classList.add('hidden');
+                    btnAguantar.classList.add('hidden');
+                }
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            e.preventDefault();
+            switch(e.key) {
+                case 'ArrowUp': mover(0, -1); break;
+                case 'ArrowDown': mover(0, 1); break;
+                case 'ArrowLeft': mover(-1, 0); break;
+                case 'ArrowRight': mover(1, 0); break;
+            }
+        });
+        
+        document.getElementById('arriba').addEventListener('click', () => mover(0, -1));
+        document.getElementById('abajo').addEventListener('click', () => mover(0, 1));
+        document.getElementById('izquierda').addEventListener('click', () => mover(-1, 0));
+        document.getElementById('derecha').addEventListener('click', () => mover(1, 0));
+        
+        ['arriba', 'abajo', 'izquierda', 'derecha'].forEach(id => {
+            const btn = document.getElementById(id);
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if(id === 'arriba') mover(0, -1);
+                if(id === 'abajo') mover(0, 1);
+                if(id === 'izquierda') mover(-1, 0);
+                if(id === 'derecha') mover(1, 0);
+            });
+        });
+        
+        document.getElementById('reiniciar').addEventListener('click', reiniciarJuego);
+        document.getElementById('reiniciar').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            reiniciarJuego();
+        });
+        
+        document.getElementById('salir').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html'; // Cambia esto por la página a la que quieras volver
+        });
+        
+        let touchStart = { x: 0, y: 0 };
+        const wrapper = document.getElementById('canvasWrapper');
+        
+        wrapper.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchStart.x = e.touches[0].clientX;
+            touchStart.y = e.touches[0].clientY;
+        });
+        
+        wrapper.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const diffX = e.changedTouches[0].clientX - touchStart.x;
+            const diffY = e.changedTouches[0].clientY - touchStart.y;
+            
+            if(Math.abs(diffX) > Math.abs(diffY)) {
+                if(diffX > 30) mover(1, 0);
+                else if(diffX < -30) mover(-1, 0);
+            } else {
+                if(diffY > 30) mover(0, 1);
+                else if(diffY < -30) mover(0, -1);
+            }
+        });
+        
+        wrapper.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+        
+        // Redimensionar canvas cuando cambie la orientación
+        window.addEventListener('resize', () => {
+            const newSize = Math.min(window.innerWidth - 40, 500);
+            canvas.width = newSize;
+            canvas.height = newSize;
+        });
+        
+        function loop() {
+            dibujarTodo();
+            requestAnimationFrame(loop);
+        }
+        
+        loop();
+        actualizarTiempo();
+        actualizarDisplayMarihuana();
+    </script>
+</body>
+</html>
