@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: black;
+        }
+
+        /* PORTADA */
+        .portada {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* GRID IMÁGENES */
+        .grid-imagenes {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 0;
+            background: black;
+        }
+
+        .grid-imagenes img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* MEJORA: filtro para imágenes más claras */
+            filter: brightness(1.4) contrast(1.1) saturate(1.2);
+            background: black;
+            transition: filter 0.3s ease;
+        }
+
+        /* CAPA OSCURA - MÁS SUTIL PARA QUE LAS IMÁGENES BRILLEN */
+        .portada::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+            z-index: 1;
+        }
+
+        /* CONTENIDO */
+        .contenido-portada {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        /* CORAZÓN SVG */
+        .corazon-linea {
+            width: 220px;
+            margin-bottom: 20px;
+            animation: latido 2s infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.8));
+        }
+
+        .corazon-linea:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 25px #ff4d6d);
+        }
+
+        .corazon-linea path {
+            pointer-events: all;
+            stroke: #ff4d6d; /* Cambié a rosado para que combine */
+            stroke-width: 3.5;
+        }
+
+        .corazon-linea text {
+            fill: white;
+            font-size: 15px;
+            font-weight: bold;
+            pointer-events: none;
+            text-shadow: 0 0 10px #ff4d6d;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* TÍTULO - MÁS BRILLANTE */
+        .contenido-portada h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            margin-bottom: 15px;
+            color: #ff4d6d;
+            text-shadow: 0 0 15px #ff4d6d, 0 0 30px #ff4d6d, 0 0 45px #ff4d6d;
+            animation: aparecer 1.5s ease;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* TEXTO - MÁS LEGIBLE */
+        .contenido-portada p {
+            font-size: clamp(1rem, 3vw, 1.6rem);
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.6;
+            padding: 0 15px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            font-weight: 400;
+            color: #ffffff;
+        }
+
+        /* RESPONSIVE AVANZADO - MEJORAS PARA TODOS LOS MÓVILES */
+        
+        /* MÓVILES PEQUEÑOS (hasta 320px) */
+        @media (max-width: 320px) {
+            .grid-imagenes img {
+                filter: brightness(1.5) contrast(1.2) saturate(1.3); /* Más brillo en pantallas pequeñas */
+            }
+            
+            .corazon-linea {
+                width: 140px;
+            }
+            
+            .contenido-portada h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* MÓVILES MEDIANOS (321px - 375px) */
+        @media (min-width: 321px) and (max-width: 375px) {
+            .grid-imagenes img {
+                filter: brightness(1.45) contrast(1.15) saturate(1.25);
+            }
+            
+            .corazon-linea {
+                width: 160px;
+            }
+            
+            .contenido-portada h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* MÓVILES GRANDES (376px - 425px) */
+        @media (min-width: 376px) and (max-width: 425px) {
+            .grid-imagenes img {
+                filter: brightness(1.4) contrast(1.1) saturate(1.2);
+            }
+            
+            .corazon-linea {
+                width: 180px;
+            }
+            
+            .contenido-portada h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* TABLETS (426px - 768px) */
+        @media (min-width: 426px) and (max-width: 768px) {
+            .grid-imagenes img {
+                filter: brightness(1.35) contrast(1.1) saturate(1.15);
+            }
+            
+            .corazon-linea {
+                width: 200px;
+            }
+        }
+
+        /* PANTALLAS GRANDES (769px+) */
+        @media (min-width: 769px) {
+            .grid-imagenes img {
+                filter: brightness(1.3) contrast(1.05) saturate(1.1);
+            }
+            
+            .corazon-linea:hover {
+                transform: scale(1.15);
+            }
+        }
+
+        /* AJUSTE PARA PANTALLAS CON POCO BRILLO */
+        @media (prefers-contrast: high) {
+            .grid-imagenes img {
+                filter: brightness(1.6) contrast(1.3) saturate(1.4);
+            }
+            
+            .contenido-portada h1 {
+                text-shadow: 0 0 20px #ff4d6d, 0 0 40px #ff4d6d;
+            }
+        }
+
+        /* AJUSTE PARA MODO OSCURO DEL SISTEMA */
+        @media (prefers-color-scheme: dark) {
+            .grid-imagenes img {
+                filter: brightness(1.45) contrast(1.15) saturate(1.25);
+            }
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MEJORA: Prevenir bordes blancos en imágenes muy claras */
+        .portada {
+            background: black;
+        }
+
+        /* MEJORA: Ajuste para pantallas con muesca (notch) */
+        @supports (padding: max(0px)) {
+            .contenido-portada {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+                padding-bottom: max(20px, env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portada">
+        <div class="grid-imagenes">
+            <img src="9.jpeg" alt="Corazones">
+            <img src="2.png" alt="Romántico">
+            <img src="3.png" alt="Amor">
+            <img src="1.png" alt="Pareja">
+        </div>
+
+        <div class="contenido-portada">
+            <svg class="corazon-linea" viewBox="0 0 100 90" onclick="irACarrusel()">
+                <path d="M50 80 
+                         L20 50 
+                         A15 15 0 1 1 50 30 
+                         A15 15 0 1 1 80 50 Z"
+                      fill="none"
+                      stroke="#ff4d6d"
+                      stroke-width="3.5"/>
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" fill="white">
+                    b & y
+                </text>
+            </svg>
+            
+            <!-- Puedes descomentar esto si quieres mostrar texto -->
+            <!-- <h1>💖 Para mi amorcito 💖</h1> -->
+        </div>
+    </div>
+
+    <script>
+        function irACarrusel() {
+            window.location.href = "carrusel.html";
+        }
+
+        // DETECCIÓN DE BRILLO DE PANTALLA (opcional)
+        if (window.matchMedia) {
+            // Si la pantalla tiene poco brillo, ajusta automáticamente
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            function handleColorSchemeChange(e) {
+                const images = document.querySelectorAll('.grid-imagenes img');
+                if (e.matches) {
+                    // Modo oscuro
+                    images.forEach(img => {
+                        img.style.filter = 'brightness(1.45) contrast(1.15) saturate(1.25)';
+                    });
+                }
+            }
+            
+            darkModeMediaQuery.addEventListener('change', handleColorSchemeChange);
+        }
+    </script>
+</body>
+</html>
