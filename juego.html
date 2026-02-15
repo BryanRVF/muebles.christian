@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Para ti ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    background:black;
+    font-family:'Poppins',sans-serif;
+}
+
+/* PORTADA */
+.portada{
+    height:100vh;
+    height:100svh; /* solución real móvil */
+    width:100%;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+/* GRID */
+.grid-imagenes{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+}
+
+.grid-imagenes img{
+    width:100%;
+    height:100%;
+    object-fit:cover; /* llena toda la pantalla */
+    filter:brightness(1.35) contrast(1.1);
+}
+
+/* Capa oscura suave */
+.portada::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.4));
+    z-index:1;
+}
+
+/* CONTENIDO */
+.contenido-portada{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* CORAZÓN */
+.corazon-linea{
+    width:min(280px,70vw);
+    height:auto;
+    animation:latido 2s infinite;
+    cursor:pointer;
+    filter:drop-shadow(0 0 20px #04693a);
+    transition:.3s;
+}
+
+.corazon-linea:hover{
+    transform:scale(1.1);
+}
+
+.corazon-linea path{
+    stroke:#04693a;
+    stroke-width:3.5;
+    fill:none;
+}
+
+.corazon-linea text{
+    fill:white;
+    font-size:18px;
+    font-weight:bold;
+}
+
+@keyframes latido{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+}
+
+/* Responsive */
+@media(max-width:480px){
+    .corazon-linea{
+        width:min(260px,80vw);
+    }
+}
+
+@media(max-width:360px){
+    .corazon-linea{
+        width:min(220px,85vw);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="portada">
+
+    <div class="grid-imagenes">
+        <img src="9.jpeg" alt="">
+        <img src="2.png" alt="">
+        <img src="3.png" alt="">
+        <img src="1.png" alt="">
+    </div>
+
+    <div class="contenido-portada">
+        <svg class="corazon-linea" viewBox="0 0 100 90" onclick="irACarrusel()">
+            <path d="M50 80 
+                     L20 50 
+                     A15 15 0 1 1 50 30 
+                     A15 15 0 1 1 80 50 Z"/>
+            <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle">
+                b & y
+            </text>
+        </svg>
+    </div>
+
+</div>
+
+<script>
+function irACarrusel(){
+    window.location.href="carrusel.html";
+}
+</script>
+
+</body>
+</html>
