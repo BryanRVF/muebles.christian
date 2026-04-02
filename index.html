@@ -6,6 +6,36 @@
   <title>Mueblería</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Opción 1 -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Opción 2 -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Opción 3 -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Opción 4 -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Opción 5 -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- Cinzel -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Playfair Display -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Montserrat -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Oswald -->
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- DM Serif Display -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+
 </head>
 <body>
 
@@ -38,7 +68,7 @@
     <div class="hero-content">
       <!-- IZQUIERDA -->
       <div class="hero-left">
-        <h3>Fabricacion Personalizada</h3>
+        <a><h3>Fabricación Personalizada</h3></a>
         
         <div class="servicio-item">
           <i class="fas fa-couch" aria-hidden="true"></i>
@@ -67,7 +97,7 @@
 
       <!-- DERECHA -->
       <div class="hero-right">
-  <h3>+20 años a tu servicio</h3>
+  <h3>+20 AÑOS A TU SERVICIOS</h3>
   
   
 
@@ -102,6 +132,30 @@
     <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85" alt="Escritorio lineal con vista panorámica" loading="lazy">
   </div>
 </section>
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Efecto de aparición al hacer scroll para productos
+    const productos = document.querySelector('.productos');
+    if (productos) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.2 });
+      observer.observe(productos);
+      productos.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      productos.style.opacity = '0';
+      productos.style.transform = 'translateY(30px)';
+    }
+  });
+</script>
 
 </body>
 </html>
