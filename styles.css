@@ -503,7 +503,9 @@ font-family: 'Playfair Display', serif;
     margin-top: 40px;
   }
   
-  
+   .producto h3 {
+    font-family: 'Uncial Antiqua', cursive !important;
+   }
   
   .whatsapp-btn {
     padding: 10px 20px;
