@@ -565,6 +565,11 @@ font-family: 'Cinzel', serif;
 }
 
 /* ========== MÓVILES PEQUEÑOS (hasta 480px) ========== */
+
+
+
+
+
 @media (max-width: 480px) {
   .hero h1 {
     font-size: 24px;
@@ -607,7 +612,9 @@ font-family: 'Cinzel', serif;
   }
   
   .producto h3 {
-    font-size: 18px;
+    font-size: 28px;
+    font-family: 'DM Serif Display', serif;
+
   }
   
   .whatsapp-btn {
@@ -1647,4 +1654,115 @@ img {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+
+
+
+
+/* esto es para las categorias que estan al comienzo */ 
+
+
+
+
+/* ===== CATEGORÍAS LISTA PREMIUM ===== */
+.categorias-lista {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 👈 2 columnas */
+  gap: 20px;
+    max-width: 600px;   /* 👈 CLAVE */
+  margin: 0 auto;     /* 👈 centrado */
+}
+
+/* ITEM */
+.categoria-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 20px;
+  border: 2px solid #e5e5e5;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* ICONO */
+.icono {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  order: 2;
+}
+
+/* TEXTO */
+.categoria-item span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* HOVER PREMIUM */
+.categoria-item:hover {
+  border-color: #5C4033;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* ===== MÓVIL ===== */
+@media (max-width: 767px) {
+  .categorias-lista {
+    grid-template-columns: 1fr; /* 👈 1 columna en móvil */
+    max-width: 200px;           /* 👈 más compacto */
+    margin: 0 auto;             /* 👈 centrado */
+    gap: 10px;
+  }
+
+  .categoria-item {
+    padding: 15px;
+  }
+
+  .icono {
+    width: 30px;
+    height: 30px;
+  }
+
+  .categoria-item span {
+    font-size: 15px;
+  }
+}
+
+
+
+
+
+
+
+/* para el ver mas de las categorias */ 
+
+
+
+/* ocultos */
+.oculto {
+  display: none;
+}
+
+/* botón premium */
+.btn-vermas {
+  margin-top: 20px;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 25px;
+  background: #5C4033;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-vermas:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
