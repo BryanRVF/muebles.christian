@@ -87,7 +87,7 @@ height: 100vh;
   right: 0;
   width: 50%;
   height: 100%;
-background:rgb(240, 238, 109);
+background:rgb(128, 0, 32);     /* #800020 */
   /* background: rgb(67, 179, 223); */ 
    border-radius: 50px 0 0 50px;
 }
